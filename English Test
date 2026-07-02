@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placement Test — English (A1–B1)</title>
+
+<!-- Яндекс.Метрика (счётчик 109141141). Работает только когда файл размещён на твоём домене. -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+try{ym(109141141,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});}catch(e){}
+</script>
+<!-- /Яндекс.Метрика -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1f2a44;
+    --paper:#faf8f4;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --line:#e8e2d6;
+    --accent:#2f6fed;        /* английский = синий */
+    --accent-soft:#eaf1fe;
+    --ok:#1f9d72;
+    --ok-soft:#e6f5ef;
+    --warn:#c9821a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Mulish',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:28px 20px 80px}
+
+  /* Header */
+  header{margin-bottom:22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:'Playfair Display',serif;font-weight:700;font-size:30px;margin:6px 0 8px;line-height:1.15}
+  .lead{color:var(--muted);font-size:15px;margin:0}
+
+  /* Sticky timer */
+  .bar{
+    position:sticky;top:0;z-index:5;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:rgba(250,248,244,.92);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:10px 0;margin-bottom:18px;
+  }
+  .progress-txt{font-size:13px;color:var(--muted);font-weight:600}
+  .timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;
+    background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+  .timer.amber{color:var(--warn);border-color:var(--warn)}
+
+  /* Questions */
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 18px 8px;margin-bottom:14px}
+  .q-top{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+  .q-num{font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:18px;min-width:30px}
+  .q-text{font-size:17px;font-weight:600}
+  .q-text .gap{border-bottom:2px solid var(--accent);padding:0 16px}
+  .q-hint{color:var(--muted);font-weight:500;font-size:14px;display:block;margin-top:2px}
+  .opts{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+  .opt{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:10px;
+    padding:11px 13px;cursor:pointer;font-size:16px;transition:border-color .12s,background .12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt input{accent-color:var(--accent);width:17px;height:17px;flex:none;margin:0}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+
+  /* Submit */
+  .submit{width:100%;border:none;border-radius:12px;background:var(--ink);color:#fff;
+    font-family:'Mulish';font-weight:700;font-size:16px;padding:15px;cursor:pointer;margin-top:6px;
+    transition:opacity .15s}
+  .submit:hover{opacity:.9}
+  .miss{text-align:center;color:var(--warn);font-size:14px;font-weight:600;margin-top:10px;min-height:18px}
+
+  /* Result */
+  .result{display:none}
+  .result.show{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .verdict{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;text-align:center}
+  .verdict .label{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .verdict .level{font-family:'Playfair Display',serif;font-size:62px;font-weight:700;line-height:1;margin:6px 0 4px;color:var(--accent)}
+  .verdict .group{font-size:16px;font-weight:600}
+  .verdict .reason{color:var(--muted);font-size:15px;margin-top:10px}
+
+  /* Level meter (signature) */
+  .meter{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:20px 0 4px}
+  .seg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 12px;text-align:center}
+  .seg .nm{font-family:'Playfair Display',serif;font-weight:700;font-size:18px}
+  .seg .sc{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin:3px 0}
+  .seg .track{height:7px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}
+  .seg .fill{height:100%;width:0;border-radius:99px;background:var(--muted);transition:width .6s ease}
+  .seg.pass{border-color:var(--ok);background:var(--ok-soft)}
+  .seg.pass .fill{background:var(--ok)}
+  .seg.pass .nm{color:var(--ok)}
+  .seg .tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:7px;color:var(--muted)}
+  .seg.pass .tag{color:var(--ok)}
+
+  .note{font-size:14px;color:var(--muted);margin-top:14px;text-align:center}
+  .note b{color:var(--warn)}
+
+  /* Review */
+  details{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  summary{cursor:pointer;padding:14px 16px;font-weight:700;font-size:15px;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"  ▾";color:var(--muted)}
+  .rev{padding:0 16px 14px}
+  .rev-item{padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+  .rev-item .rq{font-weight:600}
+  .rev-item .ra{color:var(--ok);font-weight:600}
+  .rev-item .rw{color:#c0392b}
+  .rev-lvl{display:inline-block;font-size:11px;font-weight:700;color:var(--accent);
+    background:var(--accent-soft);border-radius:6px;padding:1px 7px;margin-right:6px}
+
+  .restart{display:block;margin:22px auto 0;background:none;border:1px solid var(--line);
+    color:var(--ink);border-radius:10px;padding:11px 20px;font-family:'Mulish';font-weight:600;
+    font-size:15px;cursor:pointer}
+  .restart:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* Имя ученика */
+  .namebox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;margin-bottom:16px}
+  .namebox label{font-size:13px;font-weight:700;color:var(--ink)}
+  .namebox label span{color:var(--muted);font-weight:500}
+  .namebox input{width:100%;margin-top:7px;border:1px solid var(--line);border-radius:9px;
+    padding:10px 12px;font-family:'Mulish';font-size:15px;color:var(--ink);background:var(--paper)}
+  .namebox input:focus{outline:none;border-color:var(--accent)}
+
+  /* Telegram-блок результата */
+  .tg{margin-top:16px;text-align:center}
+  .tg-status{display:block;font-size:14px;font-weight:600;color:var(--muted);min-height:18px}
+  .tg-status.ok{color:var(--ok)}
+  .tg-status.err{color:var(--warn)}
+  .tg-btn{margin-top:10px;background:none;border:1px solid var(--line);color:var(--ink);
+    border-radius:10px;padding:10px 16px;font-family:'Mulish';font-weight:600;font-size:14px;cursor:pointer}
+  .tg-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .tg-link{display:inline-block;margin-top:10px;color:var(--accent);font-weight:700;
+    font-size:14px;text-decoration:none}
+  .tg-link:hover{text-decoration:underline}
+
+  @media(max-width:480px){
+    h1{font-size:25px}
+    .verdict .level{font-size:50px}
+    .meter{gap:7px}
+    .seg{padding:11px 6px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">English · Placement</div>
+    <h1>Тест на уровень английского</h1>
+    <p class="lead">30 коротких заданий, около 20 минут. Выбери один вариант в каждом. Не пользуйся словарём и переводчиком — нужен честный результат. Если не знаешь — отметь любой вариант и иди дальше.</p>
+  </header>
+
+  <div class="namebox">
+    <label for="stuName">Как тебя зовут? <span>(увидит преподаватель)</span></label>
+    <input id="stuName" type="text" placeholder="Имя" autocomplete="name">
+  </div>
+
+  <div class="bar">
+    <span class="progress-txt" id="progress">Отвечено: 0 / 30</span>
+    <span class="timer" id="timer">20:00</span>
+  </div>
+
+  <form id="quiz"></form>
+  <button class="submit" id="submit" type="button">Узнать результат</button>
+  <div class="miss" id="miss"></div>
+
+  <section class="result" id="result">
+    <div class="verdict">
+      <div class="label">Рекомендуемый уровень</div>
+      <div class="level" id="vLevel">A1</div>
+      <div class="group" id="vGroup"></div>
+      <div class="reason" id="vReason"></div>
+    </div>
+
+    <div class="meter" id="meter"></div>
+
+    <div class="note" id="vNote"></div>
+
+    <details id="reviewBox">
+      <summary>Разбор ошибок (для преподавателя)</summary>
+      <div class="rev" id="review"></div>
+    </details>
+
+    <div class="tg">
+      <span class="tg-status" id="tgStatus"></span>
+      <button class="tg-btn" id="tgResend" type="button" style="display:none">Отправить преподавателю ещё раз</button>
+      <a class="tg-link" id="tgLink" href="#" target="_blank" rel="noopener" style="display:none">Открыть бот преподавателя в Telegram</a>
+    </div>
+
+    <button class="restart" id="restart" type="button">Пройти заново</button>
+  </section>
+
+</div>
+
+<script>
+/* ====================================================================
+   НАСТРОЙКА УРОВНЕЙ
+   PASS = сколько правильных из 10 в блоке нужно, чтобы считать уровень
+   освоенным. 7 = стандартно (70%). Поставь 8 для более строгого отбора.
+   ==================================================================== */
+const PASS = 7;
+const PER_BLOCK = 10;
+
+/* ====================================================================
+   TELEGRAM-БОТ (отчёт преподавателю)
+   1. Вставь токен бота (от @BotFather) и свой chat_id ниже.
+   2. Узнать chat_id: напиши своему боту любое сообщение, открой
+      https://api.telegram.org/bot<ТОКЕН>/getUpdates и найди "chat":{"id":...}
+   3. TG_BOT_LINK — необязательно, для кнопки-ссылки на бота.
+   ВНИМАНИЕ: токен будет виден в исходном коде страницы на GitHub Pages.
+   Если это нежелательно — можно сделать через защищённый релей, скажи.
+   ==================================================================== */
+const TG_BOT_TOKEN = "8752655946:AAGS13Hd33IYI8IiUKv34bYy1kgKJKr0mzs
+";
+const TG_CHAT_ID   = "6587576780";
+const TG_BOT_LINK  = "https://t.me/ВСТАВЬ_ЮЗЕРНЕЙМ_БОТА";
+const TG_CONFIGURED = !TG_BOT_TOKEN.includes("ВСТАВЬ") && !TG_CHAT_ID.includes("ВСТАВЬ");
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+async function sendToTelegram(text){
+  const url=`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+  const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({chat_id:TG_CHAT_ID,text,parse_mode:"HTML",disable_web_page_preview:true})});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+
+function buildReport(name,res,counts,wrong){
+  const c=COPY[res.key];
+  const when=new Date().toLocaleString('ru-RU');
+  let t=`📝 <b>Тест: ${COPY.title}</b>\n`;
+  t+=`👤 ${name?esc(name):'без имени'}\n`;
+  t+=`🕒 ${when}\n\n`;
+  t+=`🎯 <b>Уровень: ${res.level}</b> — ${esc(c.group)}\n`;
+  t+=`📊 A1 ${counts.A1}/${PER_BLOCK} · A2 ${counts.A2}/${PER_BLOCK} · B1 ${counts.B1}/${PER_BLOCK}\n`;
+  if(wrong.length===0){ t+=`\n✅ Ошибок нет.`; }
+  else{
+    t+=`\n❌ <b>Ошибки (${wrong.length}):</b>\n`;
+    wrong.forEach((w,k)=>{
+      t+=`${k+1}. [${w.item.lvl}] ${esc(w.item.q)}\n   ✗ ${esc(w.item.opts[w.chosen])} → ✓ ${esc(w.item.opts[w.item.a])}\n`;
+    });
+  }
+  return t;
+}
+
+let LAST_REPORT="";
+function sendReport(){
+  const st=document.getElementById('tgStatus');
+  const resend=document.getElementById('tgResend');
+  const link=document.getElementById('tgLink');
+  if(TG_BOT_LINK && !TG_BOT_LINK.includes('ВСТАВЬ')){link.href=TG_BOT_LINK;link.style.display='';}
+  if(!TG_CONFIGURED){st.textContent='';return;}            // бот не настроен — молча
+  st.textContent='Отправляю результат преподавателю…';st.className='tg-status';
+  resend.style.display='none';
+  sendToTelegram(LAST_REPORT)
+    .then(()=>{st.textContent='✓ Результат отправлен преподавателю';st.className='tg-status ok';})
+    .catch(()=>{st.textContent='Не удалось отправить автоматически. Попробуй ещё раз.';
+                st.className='tg-status err';resend.style.display='';});
+}
+
+/* Вопросы. lvl — уровень блока, q — предложение с ___, hint — подсказка
+   по-русски (необязательно), opts — варианты, a — индекс правильного. */
+const QUESTIONS = [
+  // ---------- A1 ----------
+  {lvl:'A1', q:'She ___ from Spain.', opts:['is','are','am'], a:0},
+  {lvl:'A1', q:'My brother ___ tennis on Sundays.', opts:['play','plays','playing'], a:1},
+  {lvl:'A1', q:'There is ___ apple on the plate.', opts:['a','an','the'], a:1},
+  {lvl:'A1', q:'I ___ a car.', opts:["don't have","doesn't have","not have"], a:0},
+  {lvl:'A1', q:'My sister ___ swim very well.', opts:['can','can to','cans'], a:0},
+  {lvl:'A1', q:'___ shoes are very nice.', opts:['This','These','That'], a:1},
+  {lvl:'A1', q:"I get up ___ seven o'clock.", opts:['in','on','at'], a:2},
+  {lvl:'A1', q:'___ four people in my family.', opts:['There is','There are','There has'], a:1},
+  {lvl:'A1', q:'This is ___ pen.', opts:['Tom',"Tom's",'Toms'], a:1},
+  {lvl:'A1', q:'___ old are you?', opts:['What','How','Who'], a:1},
+
+  // ---------- A2 ----------
+  {lvl:'A2', q:'I ___ to London last year.', opts:['go','went','gone'], a:1},
+  {lvl:'A2', q:'She ___ come to the party yesterday.', opts:["didn't","doesn't","wasn't"], a:0},
+  {lvl:'A2', q:'Look! It ___ outside now.', opts:['rains','is raining','rain'], a:1},
+  {lvl:'A2', q:'This book is ___ than that one.', opts:['interesting','more interesting','most interesting'], a:1},
+  {lvl:'A2', q:'We ___ visit our grandmother tomorrow.', opts:['are going to','going to','will going to'], a:0},
+  {lvl:'A2', q:"There isn't ___ milk left in the fridge.", opts:['some','any','no'], a:1},
+  {lvl:'A2', q:'How ___ money do you have?', opts:['much','many','a lot'], a:0},
+  {lvl:'A2', q:"I haven't finished my homework ___.", opts:['yet','already','ever'], a:0},
+  {lvl:'A2', q:'Today the weather is ___ than yesterday.', opts:['gooder','better','more good'], a:1},
+  {lvl:'A2', q:'I ___ get up early tomorrow.', opts:['have to','must to','has to'], a:0},
+
+  // ---------- B1 ----------
+  {lvl:'B1', q:'I ___ here since 2019.', opts:['live','lived','have lived'], a:2},
+  {lvl:'B1', q:'I ___ smoke, but I stopped two years ago.', opts:['used to','use to','am used to'], a:0},
+  {lvl:'B1', q:'If it rains tomorrow, we ___ at home.', opts:['stay','will stay','would stay'], a:1},
+  {lvl:'B1', q:'If I ___ rich, I would travel the world.', opts:['am','were','will be'], a:1},
+  {lvl:'B1', q:'English ___ in many countries.', opts:['speaks','is spoken','spoken'], a:1},
+  {lvl:'B1', q:'By the time we arrived, the film ___.', opts:['already started','had already started','starts'], a:1},
+  {lvl:'B1', q:"I'd rather ___ at home tonight.", opts:['stay','to stay','staying'], a:0},
+  {lvl:'B1', q:'The man ___ lives next door is a doctor.', opts:['which','who','where'], a:1},
+  {lvl:'B1', q:'I really enjoy ___ to music.', opts:['listen','to listen','listening'], a:2},
+  {lvl:'B1', q:"He isn't answering his phone - he ___ be busy.", opts:['must','can','should'], a:0},
+];
+
+/* ===== Тексты результата (только их меняем для другого языка) ===== */
+const COPY = {
+  subject:'английского',
+  title:'Английский (A1–B1)',
+  A1:{group:'Группа A1 (с нуля / начинающие)',
+      reason:'Базовый уровень A1 ещё не закрыт — есть пробелы в основах. Это нормальная стартовая точка.'},
+  A1zero:{group:'Группа A1 — с нуля (A0)',
+      reason:'Английский практически с нуля. Идеально начинать с самого начала.'},
+  A2:{group:'Группа A2',
+      reason:'Уровень A1 освоен уверенно. Готов учиться на A2.'},
+  B1:{group:'Группа B1',
+      reason:'Уровни A1 и A2 освоены. Готов учиться на B1.'},
+  B1plus:{group:'Уровень B1 и выше',
+      reason:'Все три блока пройдены — студент уже владеет B1 и приближается к B2. Это потолок текущих групп.'}
+};
+
+/* ==================== Дальше движок не трогаем ==================== */
+const form=document.getElementById('quiz');
+QUESTIONS.forEach((item,i)=>{
+  const qtext=item.q.replace('___','<span class="gap"></span>');
+  const hint=item.hint?`<span class="q-hint">${item.hint}</span>`:'';
+  const opts=item.opts.map((o,j)=>`
+    <label class="opt" data-q="${i}" data-o="${j}">
+      <input type="radio" name="q${i}" value="${j}"> <span>${o}</span>
+    </label>`).join('');
+  const el=document.createElement('div');
+  el.className='q';
+  el.innerHTML=`<div class="q-top"><span class="q-num">${i+1}</span>
+    <span class="q-text">${qtext}${hint}</span></div>
+    <div class="opts">${opts}</div>`;
+  form.appendChild(el);
+});
+
+const progressEl=document.getElementById('progress');
+form.addEventListener('change',e=>{
+  if(e.target.name){
+    const lab=e.target.closest('.opt');
+    lab.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+    lab.classList.add('sel');
+  }
+  const answered=new Set([...form.querySelectorAll('input:checked')].map(i=>i.name)).size;
+  progressEl.textContent=`Отвечено: ${answered} / ${QUESTIONS.length}`;
+});
+
+/* Таймер — информационный, ничего не блокирует */
+let left=20*60;const timerEl=document.getElementById('timer');let ticking=true;
+const tick=setInterval(()=>{
+  if(!ticking)return;
+  left--;
+  if(left<=0){left=0;ticking=false;timerEl.textContent='Время вышло';timerEl.classList.add('amber');return;}
+  const m=String(Math.floor(left/60)).padStart(2,'0');
+  const s=String(left%60).padStart(2,'0');
+  timerEl.textContent=`${m}:${s}`;
+  if(left<=120)timerEl.classList.add('amber');
+},1000);
+
+/* Подсчёт по блокам + воротная (gated) логика */
+function place(c){ // c = {A1,A2,B1}
+  if(c.A1 < PASS) return c.A1 < 4 ? {level:'A1',key:'A1zero',gate:0}:{level:'A1',key:'A1',gate:0};
+  if(c.A2 < PASS) return {level:'A2',key:'A2',gate:1};
+  if(c.B1 < PASS) return {level:'B1',key:'B1',gate:2};
+  return {level:'B1+',key:'B1plus',gate:3};
+}
+
+document.getElementById('submit').addEventListener('click',()=>{
+  const answered=new Set([...form.querySelectorAll('input:checked')].map(i=>i.name)).size;
+  if(answered<QUESTIONS.length){
+    document.getElementById('miss').textContent=`Отвечено ${answered} из ${QUESTIONS.length}. Ответь на все вопросы — это нужно для точного результата.`;
+    const firstEmpty=QUESTIONS.findIndex((_,i)=>!form.querySelector(`input[name="q${i}"]:checked`));
+    if(firstEmpty>=0)form.querySelectorAll('.q')[firstEmpty].scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('miss').textContent='';
+  ticking=false;clearInterval(tick);
+
+  const counts={A1:0,A2:0,B1:0};const wrong=[];
+  QUESTIONS.forEach((item,i)=>{
+    const val=+form.querySelector(`input[name="q${i}"]:checked`).value;
+    if(val===item.a)counts[item.lvl]++;
+    else wrong.push({i,item,chosen:val});
+  });
+
+  const res=place(counts);
+  const c=COPY[res.key];
+
+  document.getElementById('vLevel').textContent=res.level;
+  document.getElementById('vGroup').textContent=c.group;
+  document.getElementById('vReason').textContent=c.reason;
+
+  // Метр уровней
+  const meter=document.getElementById('meter');meter.innerHTML='';
+  ['A1','A2','B1'].forEach((lv,idx)=>{
+    const sc=counts[lv];const passed=sc>=PASS;
+    const seg=document.createElement('div');
+    seg.className='seg'+(passed?' pass':'');
+    seg.innerHTML=`<div class="nm">${lv}</div><div class="sc">${sc}/${PER_BLOCK}</div>
+      <div class="track"><div class="fill" style="width:${sc/PER_BLOCK*100}%"></div></div>
+      <div class="tag">${passed?'освоен':'не закрыт'}</div>`;
+    meter.appendChild(seg);
+  });
+
+  // Заметка про границу/ворота
+  let note=`Порог уровня: ${PASS} из ${PER_BLOCK}. `;
+  const borderline=['A1','A2','B1'].find(lv=>counts[lv]===PASS-1);
+  if(borderline){
+    note+=`Блок <b>${borderline}</b> на грани (${counts[borderline]}/${PER_BLOCK}) — стоит уточнить вживую на пробном.`;
+  }else{
+    note+='Оценка идёт по нижнему незакрытому блоку: даже сильный результат выше не поднимает уровень, пока есть пробел снизу.';
+  }
+  document.getElementById('vNote').innerHTML=note;
+
+  // Разбор ошибок
+  const rev=document.getElementById('review');rev.innerHTML='';
+  if(wrong.length===0){rev.innerHTML='<div class="rev-item">Все ответы верные.</div>';}
+  else wrong.forEach(w=>{
+    const d=document.createElement('div');d.className='rev-item';
+    d.innerHTML=`<span class="rev-lvl">${w.item.lvl}</span>
+      <span class="rq">${w.item.q.replace('___','___')}</span><br>
+      <span class="rw">✗ ${w.item.opts[w.chosen]}</span> &nbsp;→&nbsp;
+      <span class="ra">✓ ${w.item.opts[w.item.a]}</span>`;
+    rev.appendChild(d);
+  });
+  document.querySelector('#reviewBox summary').textContent=`Разбор ошибок (${wrong.length}) — для преподавателя`;
+
+  document.getElementById('submit').style.display='none';
+  const r=document.getElementById('result');r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+  try{ym(109141141,'reachGoal','test_en_done',{level:res.level});}catch(e){}
+
+  // --- Отчёт преподавателю в Telegram ---
+  const stuName=(document.getElementById('stuName').value||'').trim();
+  LAST_REPORT=buildReport(stuName,res,counts,wrong);
+  sendReport();
+});
+
+document.getElementById('tgResend').addEventListener('click',sendReport);
+document.getElementById('restart').addEventListener('click',()=>location.reload());
+</script>
+</body>
+</html>
