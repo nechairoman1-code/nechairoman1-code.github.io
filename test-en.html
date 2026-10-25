@@ -219,25 +219,24 @@ const PASS = 7;
 const PER_BLOCK = 10;
 
 /* ====================================================================
-   TELEGRAM-БОТ (отчёт преподавателю)
-   1. Вставь токен бота (от @BotFather) и свой chat_id ниже.
-   2. Узнать chat_id: напиши своему боту любое сообщение, открой
-      https://api.telegram.org/bot<ТОКЕН>/getUpdates и найди "chat":{"id":...}
-   3. TG_BOT_LINK — необязательно, для кнопки-ссылки на бота.
-   ВНИМАНИЕ: токен будет виден в исходном коде страницы на GitHub Pages.
-   Если это нежелательно — можно сделать через защищённый релей, скажи.
+   ОТЧЁТ ПРЕПОДАВАТЕЛЮ В TELEGRAM
+   Токена бота в этой странице нет: результат уходит на адрес REPORT_URL,
+   а сообщение Роману отправляет бот там, где хранится токен.
+   REPORT_URL:
+   - пока нет сервера платформы - адрес посредника Cloudflare Worker,
+     например https://test-relay.ИМЯ.workers.dev
+     (инструкция - репозиторий platforma, tools/test-relay/README.md);
+   - когда будет сервер платформы - https://АДРЕС_ПЛАТФОРМЫ/api/test-report
+   TG_BOT_LINK — необязательно, для кнопки-ссылки на бота.
    ==================================================================== */
-const TG_BOT_TOKEN = "8752655946:AAGS13Hd33IYI8IiUKv34bYy1kgKJKr0mzs";
-const TG_CHAT_ID   = "6587576780";
+const REPORT_URL  = "https://ВСТАВЬ_АДРЕС_ПОСРЕДНИКА";
 const TG_BOT_LINK  = "https://t.me/ВСТАВЬ_ЮЗЕРНЕЙМ_БОТА";
-const TG_CONFIGURED = !TG_BOT_TOKEN.includes("ВСТАВЬ") && !TG_CHAT_ID.includes("ВСТАВЬ");
+const TG_CONFIGURED = !REPORT_URL.includes("ВСТАВЬ");
 
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
 async function sendToTelegram(text){
-  const url=`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-  const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({chat_id:TG_CHAT_ID,text,parse_mode:"HTML",disable_web_page_preview:true})});
+  const r=await fetch(REPORT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text})});
   if(!r.ok) throw new Error("HTTP "+r.status);
   return r.json();
 }
@@ -266,7 +265,7 @@ function sendReport(){
   const resend=document.getElementById('tgResend');
   const link=document.getElementById('tgLink');
   if(TG_BOT_LINK && !TG_BOT_LINK.includes('ВСТАВЬ')){link.href=TG_BOT_LINK;link.style.display='';}
-  if(!TG_CONFIGURED){st.textContent='';return;}            // бот не настроен — молча
+  if(!TG_CONFIGURED){st.textContent='Сделай скриншот результата и отправь его преподавателю.';st.className='tg-status';return;} // адрес отправки ещё не указан
   st.textContent='Отправляю результат преподавателю…';st.className='tg-status';
   resend.style.display='none';
   sendToTelegram(LAST_REPORT)
