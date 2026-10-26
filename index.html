@@ -1025,8 +1025,9 @@ function changeMonth(dir) {
   renderCalendar();
 }
 
-const TELEGRAM_TOKEN = '8752655946:AAGS13Hd33IYI8IiUKv34bYy1kgKJKr0mzs';
-const TELEGRAM_CHAT_ID = '6587576780';
+// Заявка уходит посреднику (Cloudflare Worker), он отправляет её Роману в Telegram.
+// Токен бота хранится только в настройках Worker, в этой странице его нет. Текст сообщения Worker собирает сам.
+const RELAY_URL = "https://test-relay.nechairoman1.workers.dev";
 
 async function submitForm() {
   const name = document.getElementById('f-name').value.trim();
@@ -1044,43 +1045,23 @@ async function submitForm() {
     return;
   }
 
-  const langLabel = lang === 'en' ? 'Английский' : 'Испанский';
-  const levelLabels = {
-    'zero': 'С нуля',
-    'A1': 'A1 — забыл школу',
-    'A2': 'A2 — базовый',
-    'B1': 'B1 — общаюсь, хочу свободнее'
-  };
-
   const btn = document.querySelector('.btn-submit');
   btn.textContent = 'Отправляем...';
   btn.disabled = true;
 
-  const utmInfo = window.location.search ? `\n🔗 *UTM:* ${window.location.search}` : '';
-
-  let message = `🎓 *Новая заявка с сайта*\n\n`;
-  message += `👤 *Имя:* ${name}\n`;
-  message += `🗣 *Язык:* ${langLabel}\n`;
-  message += `📊 *Уровень:* ${levelLabels[level] || level}\n`;
-  message += `💬 *${messenger}:* ${contact}` + utmInfo;
-
   try {
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'Markdown'
-      })
+    const response = await fetch(RELAY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind: "lead", name, lang, level, messenger, contact, utm: window.location.search })
     });
     const result = await response.json();
-    if (result.ok) {
+    if (result.ok === true) {
       document.getElementById('form-area').style.display = 'none';
       document.getElementById('form-success').style.display = 'block';
       trackGoal('form_sent');
     } else {
-      throw new Error(result.description);
+      throw new Error(result.error || ('HTTP ' + response.status));
     }
   } catch (err) {
     btn.textContent = 'Отправить заявку →';
